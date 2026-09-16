@@ -42,14 +42,24 @@ def test_agent_install_contract_and_hermes_skill_match_release():
     setup = (ROOT / "docs" / "AGENT_SETUP.md").read_text(encoding="utf-8")
     skill = (ROOT / "integrations" / "hermes" / "SKILL.md").read_text(encoding="utf-8")
 
-    assert "v0.3.1" in contract
-    assert "v0.3.1" in setup
-    assert "version: 0.3.1" in skill
+    assert "v0.3.2" in contract
+    assert "v0.3.2" in setup
+    assert "version: 0.3.2" in skill
     assert "--name agent-voice --yes" in contract
     assert "agent-voice --doctor --json" in contract
     assert "[[audio_as_voice]]" in skill
     assert "MEDIA:/absolute/path/to/result.ogg" in skill
     assert "Microsoft" in skill
+
+
+def test_release_workflow_keeps_reproducible_sbom_attestable():
+    workflow = (ROOT / ".github" / "workflows" / "release.yml").read_text(
+        encoding="utf-8"
+    )
+    assert "--output-reproducible" in workflow
+    assert "d['serialNumber']" in workflow
+    assert "agent-voice-kit-sbom-${{ github.sha }}" in workflow
+    assert "sbom-path:" in workflow
 
 
 def test_cli_accepts_non_markdown_utf8_text_file(monkeypatch, tmp_path, capsys):

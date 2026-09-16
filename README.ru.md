@@ -58,7 +58,7 @@ choco install ffmpeg -y
 Через `uv`:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.1"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.2"
 agent-voice --version
 agent-voice --doctor --json
 ```
@@ -86,7 +86,7 @@ uv run agent-voice --help
 
 ```bash
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.1/integrations/hermes/SKILL.md \
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.2/integrations/hermes/SKILL.md \
   --name agent-voice --yes
 ```
 

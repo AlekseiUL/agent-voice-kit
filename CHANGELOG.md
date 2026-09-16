@@ -2,6 +2,10 @@
 
 All notable changes are documented here.
 
+## 0.3.2
+
+- Keep the CycloneDX SBOM reproducible while adding a commit-derived deterministic serial number required by GitHub's native SBOM attestation detector.
+
 ## 0.3.1
 
 - Generate a complete CycloneDX runtime dependency SBOM from an isolated wheel installation.

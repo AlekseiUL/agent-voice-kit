@@ -36,6 +36,7 @@ jobs:
             --output-reproducible \
             --output-format JSON \
             --output-file dist/agent-voice-kit-${{ github.ref_name }}.cyclonedx.json
+          uv run python -c "import json,uuid; from pathlib import Path; p=Path('dist/agent-voice-kit-${{ github.ref_name }}.cyclonedx.json'); d=json.loads(p.read_text()); d['serialNumber']='urn:uuid:'+str(uuid.uuid5(uuid.NAMESPACE_URL, 'agent-voice-kit-sbom-${{ github.sha }}')); p.write_text(json.dumps(d, indent=2, sort_keys=True)+'\n')"
       - name: Sign build provenance
         uses: actions/attest@v4
         with:

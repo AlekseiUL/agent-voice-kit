@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agent-voice-kit"
-version = "0.3.1"
+version = "0.3.2"
 description = "Resumable, verified TTS for AI-agent replies and UTF-8 text files"
 readme = "README.md"
 requires-python = ">=3.10"
