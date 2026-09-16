@@ -1,7 +1,7 @@
 ---
 name: agent-voice
 description: "Use when an agent must answer by voice or voice a text/Markdown document. Generate verified audio with Agent Voice Kit and deliver it through the active platform."
-version: 0.2.1
+version: 0.3.0
 license: MIT
 metadata:
   hermes:
@@ -10,13 +10,13 @@ metadata:
 
 # Agent Voice
 
-Use the installed `agent-voice` CLI for explicit requests such as “answer by voice”, “record this”, or “voice this Markdown file”.
+Use the installed `agent-voice` CLI for explicit requests such as “answer by voice”, “record this”, or “voice this text file”. UTF-8 Markdown, TXT, RST, CSV, JSON, YAML, logs and source files are accepted; Markdown cleanup is automatic only for Markdown extensions.
 
 ## Preconditions
 
 1. Run `agent-voice --doctor --json` when readiness is unknown.
 2. `ready: true` proves local dependencies only. A short synthesis proves network access.
-3. Text is sent to Microsoft Edge Read Aloud through `edge-tts`. Do not send secrets, credentials, health records or other sensitive text without confirming that this external transfer is acceptable.
+3. Text is sent to the selected external TTS provider. The default is Microsoft Edge Read Aloud through `edge-tts`; Azure/OpenAI are explicit alternatives. Do not send secrets, credentials, health records or other sensitive text without confirming that this external transfer is acceptable.
 
 ## Voice an answer
 
@@ -26,13 +26,15 @@ Preserve the full answer unless the user asks to shorten it. Write the final res
 agent-voice /path/to/response.md --output /path/to/response.ogg --json
 ```
 
-## Voice a document
+## Voice a text file
 
-For a user-provided UTF-8 `.md` or `.txt` file:
+For any user-provided UTF-8 text file:
 
 ```bash
 agent-voice /path/to/document.md --output /path/to/document.ogg --json
 ```
+
+Use `--markdown` to normalize Markdown stored under another extension, or `--plain-text` to preserve Markdown control characters literally.
 
 Do not voice a different local file merely because its name is similar. Respect the active agent's normal file-access and privacy boundaries.
 

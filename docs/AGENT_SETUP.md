@@ -18,9 +18,9 @@ The doctor should return `"ready": true`. It deliberately does not contact Micro
 ## What the installed agent should do later
 
 - “Answer by voice” → prepare the complete answer, generate `.ogg`, verify the receipt, deliver one voice message.
-- “Voice this document” → pass the exact UTF-8 `.md` or `.txt` path to `agent-voice`, then deliver the generated file.
+- “Voice this document” → pass the exact regular UTF-8 text-file path to `agent-voice`, then deliver the generated file. Markdown cleanup is automatic only for Markdown extensions.
 - Long recording interrupted → repeat the same text and settings so verified chunks resume.
-- Sensitive document → stop and explain that its text would be sent to Microsoft Edge Read Aloud.
+- Sensitive document → stop and explain that its text would be sent to the selected external TTS provider.
 
 ## Generic agents
 
@@ -31,9 +31,9 @@ Any agent that can run commands and attach files can use the CLI. The delivery s
 Install the CLI first, then the skill:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.2.1"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.0"
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.2.1/integrations/hermes/SKILL.md \
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.0/integrations/hermes/SKILL.md \
   --name agent-voice --yes
 ```
 

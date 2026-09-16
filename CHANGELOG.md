@@ -2,6 +2,15 @@
 
 All notable changes are documented here.
 
+## 0.3.0
+
+- Added UTF-8 text-file input independent of filename extension, with Markdown auto-detection.
+- Added official Azure Speech and OpenAI Speech API providers alongside the free Edge route.
+- Added conservative expired-cache preview and explicit apply pruning.
+- Added Windows CI for Python 3.10 and 3.12.
+- Added signed GitHub release provenance and SPDX SBOM generation.
+- Added a tokenless PyPI Trusted Publishing workflow, pending owner-side publisher registration.
+
 ## 0.2.1
 
 - Made the documented Hermes skill installation non-interactive with `--yes`.

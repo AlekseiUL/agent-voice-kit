@@ -16,7 +16,8 @@ from typing import Any
 
 from filelock import FileLock, Timeout as LockTimeout
 
-from .provider import EdgeProvider, SpeechProvider, retryable_edge_error
+from .cache import default_cache
+from .provider import SpeechProvider, build_provider, retryable_provider_error
 from .text import markdown_to_text, split_text
 
 
@@ -149,11 +150,6 @@ def _publish(source: Path, destination: Path, *, force: bool) -> None:
         temp.unlink(missing_ok=True)
 
 
-def _default_cache() -> Path:
-    base = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache"))
-    return base / "agent-voice-kit"
-
-
 def _load_manifest(path: Path, job_id: str, count: int) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
@@ -185,7 +181,9 @@ def synthesize(
     text: str,
     output: str | Path,
     *,
-    voice: str = "ru-RU-DmitryNeural",
+    voice: str | None = None,
+    provider_name: str = "edge",
+    model: str | None = None,
     rate: str = "+0%",
     volume: str = "+0%",
     pitch: str = "+0Hz",
@@ -206,16 +204,17 @@ def synthesize(
     chunks = split_text(spoken, chunk_chars)
     if not chunks:
         raise ValueError("text is empty after normalization")
+    provider = provider or build_provider(provider_name)
+    actual_provider = getattr(provider, "name", provider_name)
+    actual_voice = voice or getattr(provider, "default_voice", "ru-RU-DmitryNeural")
     identity = {
-        "version": 1, "provider": "edge", "voice": voice, "rate": rate, "volume": volume,
-        "pitch": pitch, "format": output_format, "chunks": chunks,
+        "version": 2, "provider": actual_provider, "model": model, "voice": actual_voice,
+        "rate": rate, "volume": volume, "pitch": pitch, "format": output_format, "chunks": chunks,
     }
     job_id = hashlib.sha256(json.dumps(identity, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
-    root = Path(cache_dir).expanduser() if cache_dir else _default_cache()
+    root = Path(cache_dir).expanduser() if cache_dir else default_cache()
     root.mkdir(parents=True, exist_ok=True, mode=0o700)
     root.chmod(0o700)
-    provider = provider or EdgeProvider()
-
     def execute(job: Path) -> SynthesisResult:
         manifest_path = job / "manifest.json"
         manifest = _load_manifest(manifest_path, job_id, len(chunks)) if resume else {
@@ -235,9 +234,12 @@ def synthesize(
             attempts = (1, 2) if resume else (1,)
             for attempt in attempts:
                 with tempfile.TemporaryDirectory(prefix=".attempt-", dir=job) as temporary:
-                    raw = Path(temporary) / "edge.mp3"
+                    raw = Path(temporary) / "provider.mp3"
                     try:
-                        provider.save(chunk, raw, voice=voice, rate=rate, volume=volume, pitch=pitch, timeout=timeout)
+                        provider.save(
+                            chunk, raw, voice=actual_voice, rate=rate, volume=volume,
+                            pitch=pitch, timeout=timeout, model=model,
+                        )
                         converted = Path(temporary) / f"verified.{output_format}"
                         _convert(raw, converted, output_format)
                         metadata = _verified_metadata(converted)
@@ -251,7 +253,7 @@ def synthesize(
                         break
                     except Exception as exc:
                         last_error = exc
-                        if attempt == attempts[-1] or not retryable_edge_error(exc):
+                        if attempt == attempts[-1] or not retryable_provider_error(exc):
                             break
                         time.sleep(1.0)
             if last_error is not None:
@@ -269,7 +271,7 @@ def synthesize(
         _publish(final, destination, force=force)
         published = _verified_metadata(destination)
         return SynthesisResult(
-            output=destination, provider="edge", voice=voice, format=output_format,
+            output=destination, provider=actual_provider, voice=actual_voice, format=output_format,
             chunks=len(chunks), resumed_chunks=resumed, duration_seconds=published["duration"],
             bytes=published["bytes"], sha256=published["sha256"], job_id=job_id,
         )
@@ -279,8 +281,10 @@ def synthesize(
             return execute(Path(directory))
     job = root / job_id
     job.mkdir(parents=True, exist_ok=True, mode=0o700)
+    lock_root = root / ".locks"
+    lock_root.mkdir(parents=True, exist_ok=True, mode=0o700)
     try:
-        with FileLock(str(job / ".lock"), timeout=0):
+        with FileLock(str(lock_root / f"{job_id}.lock"), timeout=0):
             return execute(job)
     except LockTimeout as exc:
         raise RuntimeError("the same recording is already running; wait and repeat the request") from exc

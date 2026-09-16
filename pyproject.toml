@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agent-voice-kit"
-version = "0.2.1"
-description = "Resumable, verified Edge TTS for AI-agent replies and Markdown files"
+version = "0.3.0"
+description = "Resumable, verified TTS for AI-agent replies and UTF-8 text files"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {file = "LICENSE"}
@@ -22,6 +22,7 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
   "Operating System :: MacOS",
   "Operating System :: POSIX :: Linux",
+  "Operating System :: Microsoft :: Windows",
 ]
 dependencies = [
   "edge-tts==7.2.8",

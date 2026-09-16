@@ -1,0 +1,50 @@
+name: Publish to PyPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing signed release tag, for example v0.3.0'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          python-version: '3.12'
+      - name: Verify tag and build distributions
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION=$(uv version --short)
+          test "v${VERSION}" = "${{ inputs.tag }}"
+          uv build
+      - uses: actions/upload-artifact@v6
+        with:
+          name: pypi-distributions
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/agent-voice-kit
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          name: pypi-distributions
+          path: dist/
+      - name: Publish through PyPI Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@release/v1

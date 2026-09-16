@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.metadata
 import json
+import os
 import platform
 import shutil
 import subprocess
@@ -12,7 +13,7 @@ from pathlib import Path
 from typing import Any
 
 
-def doctor(cache_dir: str | Path | None = None) -> dict[str, Any]:
+def doctor(cache_dir: str | Path | None = None, *, provider: str = "edge") -> dict[str, Any]:
     """Check local prerequisites without sending text to an external service."""
     ffmpeg = shutil.which("ffmpeg")
     ffprobe = shutil.which("ffprobe")
@@ -39,16 +40,27 @@ def doctor(cache_dir: str | Path | None = None) -> dict[str, Any]:
     except OSError:
         pass
     checks = {
-        "edge_tts_installed": edge_version is not None,
         "ffmpeg_available": ffmpeg is not None,
         "ffprobe_available": ffprobe is not None,
         "libopus_available": "libopus" in encoders,
         "libmp3lame_available": "libmp3lame" in encoders,
         "cache_writable": cache_writable,
     }
+    if provider == "edge":
+        checks["edge_tts_installed"] = edge_version is not None
+    elif provider == "azure":
+        checks["azure_key_configured"] = bool(os.environ.get("AZURE_SPEECH_KEY"))
+        checks["azure_location_configured"] = bool(
+            os.environ.get("AZURE_SPEECH_REGION") or os.environ.get("AZURE_SPEECH_ENDPOINT")
+        )
+    elif provider == "openai":
+        checks["openai_key_configured"] = bool(os.environ.get("OPENAI_API_KEY"))
+    else:
+        raise ValueError(f"unsupported provider: {provider}")
     return {
         "ready": all(checks.values()),
         "network_checked": False,
+        "provider": provider,
         "python": platform.python_version(),
         "edge_tts": edge_version,
         "checks": checks,
@@ -60,5 +72,5 @@ def doctor(cache_dir: str | Path | None = None) -> dict[str, Any]:
     }
 
 
-def doctor_json(cache_dir: str | Path | None = None) -> str:
-    return json.dumps(doctor(cache_dir), ensure_ascii=False, sort_keys=True)
+def doctor_json(cache_dir: str | Path | None = None, *, provider: str = "edge") -> str:
+    return json.dumps(doctor(cache_dir, provider=provider), ensure_ascii=False, sort_keys=True)

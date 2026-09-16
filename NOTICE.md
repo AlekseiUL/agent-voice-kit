@@ -19,3 +19,10 @@ The consumer endpoint used by `edge-tts` is not a contracted API for this projec
 ## FFmpeg
 
 FFmpeg/ffprobe are external runtime programs used for conversion and verification. They are not bundled with this repository. Their licensing depends on the build distributed by your operating system or package manager: https://ffmpeg.org/legal.html
+
+## Optional official providers
+
+The optional `azure` route calls the official Azure Speech REST API, and the optional `openai` route calls the official OpenAI Audio Speech REST API. No provider SDK code is bundled. Users supply their own accounts, credentials and billing relationship and must follow the applicable provider terms.
+
+- Azure Speech documentation: https://learn.microsoft.com/azure/ai-services/speech-service/how-to-speech-synthesis
+- OpenAI text-to-speech documentation: https://developers.openai.com/api/docs/guides/text-to-speech

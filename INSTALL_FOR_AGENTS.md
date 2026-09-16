@@ -4,7 +4,7 @@ This file is the safe, reproducible installation path for an AI agent.
 
 ## Goal
 
-Install Agent Voice Kit, verify its local prerequisites, run one explicit live smoke test, and report what changed. The tool must be able to voice a complete response or a UTF-8 Markdown/text document. Long identical jobs should resume from verified chunks.
+Install Agent Voice Kit, verify its local prerequisites, run one explicit live smoke test, and report what changed. The tool must be able to voice a complete response or any regular UTF-8 text file. Long identical jobs should resume from verified chunks.
 
 ## Safety boundary
 
@@ -19,7 +19,7 @@ Install Agent Voice Kit, verify its local prerequisites, run one explicit live s
 Use the pinned release:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.2.1"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.0"
 agent-voice --version
 agent-voice --doctor --json
 ```
@@ -54,7 +54,7 @@ After the CLI passes, install the maintained skill into the active Hermes profil
 
 ```bash
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.2.1/integrations/hermes/SKILL.md \
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.0/integrations/hermes/SKILL.md \
   --name agent-voice --yes
 ```
 
@@ -70,3 +70,5 @@ Report:
 - whether the Hermes skill was installed;
 - privacy boundary: synthesis sends text to Microsoft;
 - remaining limitation: the consumer endpoint has no project SLA.
+
+For an official paid route, select `--provider azure` or `--provider openai` and configure that provider's environment variables. Never request or print credentials in chat. Preview expired generated-audio cache with `agent-voice --prune-cache --json`; deletion requires the separate explicit `--apply` flag.
