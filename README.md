@@ -1,0 +1,183 @@
+# Agent Voice Kit — «Голос агента»
+
+[Русская версия](README.ru.md)
+
+[![CI](https://github.com/AlekseiUL/agent-voice-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/AlekseiUL/agent-voice-kit/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)
+
+Turn an AI-agent reply or a Markdown file into verified MP3 or Telegram-ready Ogg/Opus audio. Agent Voice Kit uses the server-side Microsoft Edge Read Aloud service through the independent [`edge-tts`](https://github.com/rany2/edge-tts) client, so speech generation does not run a neural model on your computer.
+
+The project adds the reliability layer that a one-line TTS call does not provide: bounded retry, short chunks, checkpoint resume, full decode verification and atomic output publication.
+
+## What it does
+
+- reads UTF-8 Markdown or accepts text directly;
+- removes common Markdown controls without discarding readable content;
+- splits long text at sentence and word boundaries;
+- retries a transient Edge failure once;
+- saves each verified chunk and resumes an identical request later;
+- converts audio to MP3 or Telegram-compatible Ogg/Opus;
+- validates duration and decodes the complete file with FFmpeg;
+- writes the final file atomically and refuses accidental overwrite;
+- prints a compact human result or a machine-readable JSON receipt.
+
+## Important boundary
+
+This is not an official Microsoft SDK and not a hosted TTS service. The consumer Edge Read Aloud endpoint has no SLA for this project and can change or stop working. Internet access is required. Do not send sensitive text unless transferring it to the external service is acceptable.
+
+For contractual availability or commercial support, evaluate an official TTS provider. Agent Voice Kit deliberately does not fall back to another provider silently.
+
+## Requirements
+
+- Python 3.10 or newer;
+- `ffmpeg` and `ffprobe` in `PATH`;
+- internet access for live synthesis.
+
+Install FFmpeg:
+
+```bash
+# macOS
+brew install ffmpeg
+
+# Ubuntu/Debian
+sudo apt-get update && sudo apt-get install -y ffmpeg
+```
+
+## Install
+
+With `uv`:
+
+```bash
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git"
+agent-voice --version
+```
+
+Or from a clone:
+
+```bash
+git clone https://github.com/AlekseiUL/agent-voice-kit.git
+cd agent-voice-kit
+uv sync
+uv run agent-voice --help
+```
+
+## Quick start
+
+Voice a Markdown file as a Telegram-ready voice message:
+
+```bash
+agent-voice answer.md --output answer.ogg
+```
+
+Speak direct text:
+
+```bash
+agent-voice --text "The agent has finished the task." --voice en-US-GuyNeural --output answer.mp3
+```
+
+Russian voice with a slightly faster rate:
+
+```bash
+agent-voice answer.md \
+  --voice ru-RU-DmitryNeural \
+  --rate=+15% \
+  --output answer.ogg
+```
+
+Machine-readable receipt:
+
+```bash
+agent-voice answer.md --output answer.ogg --json
+```
+
+Example:
+
+```json
+{
+  "success": true,
+  "output": "answer.ogg",
+  "provider": "edge",
+  "chunks": 3,
+  "resumed_chunks": 3,
+  "duration_seconds": 72.4
+}
+```
+
+The real receipt also contains the voice, format, byte size, SHA-256 digest and a content-derived job ID. It stores only the output filename, not an absolute local path.
+
+## Failure and resume behavior
+
+A new request gets at most two attempts per chunk: the initial request and one retry for timeouts, connection failures, HTTP 429/5xx, `NoAudioReceived` or `WebSocketError`. Configuration errors and HTTP 403 are not retried.
+
+Completed chunks are verified before entering the checkpoint. Repeating the same text and settings reuses those chunks. The checkpoint manifest contains hashes and audio metadata, not the original text. The logical retention window is seven days; v0.1.0 does not yet delete expired cache directories automatically.
+
+Disable checkpoint reuse and the retry when exact-one behavior is required:
+
+```bash
+agent-voice answer.md --output answer.ogg --no-resume
+```
+
+## Using it from an agent
+
+The CLI is intentionally platform-neutral. An agent can run it as a subprocess, inspect the exit code/JSON receipt and attach the resulting file through its own delivery layer:
+
+```python
+import subprocess
+
+result = subprocess.run(
+    ["agent-voice", "reply.md", "--output", "reply.ogg", "--json"],
+    text=True,
+    capture_output=True,
+    check=True,
+)
+print(result.stdout)
+```
+
+Telegram bots should upload the generated `.ogg` through their voice-message method. Tokens, chat IDs and sending logic are intentionally outside this repository.
+
+## Commands
+
+```text
+agent-voice INPUT [-o FILE]
+agent-voice --text TEXT [-o FILE]
+```
+
+Run `agent-voice --help` for the verified current flag list.
+
+Safety defaults:
+
+- output must end in `.ogg` or `.mp3`;
+- an existing different output is not replaced without `--force`;
+- `--force` affects only the explicitly named output file;
+- output symlinks are rejected;
+- concurrent identical jobs fail with a clear busy error instead of corrupting checkpoints.
+
+## Development
+
+```bash
+uv sync --extra dev
+uv run pytest
+uv run python scripts/privacy_scan.py
+uv build
+```
+
+Unit tests synthesize local test tones and do not contact Microsoft. A manual live smoke is explicit:
+
+```bash
+uv run agent-voice --text "Live synthesis check." --voice en-US-GuyNeural --output /tmp/agent-voice-live.ogg
+```
+
+## Attribution and licensing
+
+Agent Voice Kit code is released under the [MIT License](LICENSE). It depends on `edge-tts`, which is a separate LGPL-3.0 project. FFmpeg is an external runtime dependency and is not bundled. See [NOTICE.md](NOTICE.md) for sources, licenses and the Microsoft-service boundary.
+
+## Creator links
+
+- GitHub: https://github.com/AlekseiUL
+- YouTube: https://youtube.com/@alekseiulianov
+- Telegram — Sprut AI: https://t.me/Sprut_AI
+- Telegram community: https://t.me/+eH-qNIDmud8zNDZi
+- AI Операционка / support: https://t.me/tribute/app?startapp=sJyg
+
+Created and maintained by [AlekseiUL](https://github.com/AlekseiUL) with community contributors.

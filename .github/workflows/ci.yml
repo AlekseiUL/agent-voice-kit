@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: ['3.10', '3.12']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install FFmpeg on Ubuntu
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Install FFmpeg on macOS
+        if: runner.os == 'macOS'
+        run: brew install ffmpeg
+      - run: uv sync --extra dev
+      - run: uv run pytest
+      - run: uv run python scripts/privacy_scan.py
+      - run: uv build
+      - run: uv run agent-voice --help

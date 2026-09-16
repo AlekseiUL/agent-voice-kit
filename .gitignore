@@ -1,0 +1,16 @@
+.DS_Store
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+.coverage
+htmlcov/
+*.ogg
+*.mp3
+*.wav
+*.json
+!examples/*.json

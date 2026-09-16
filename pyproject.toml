@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-voice-kit"
+version = "0.1.0"
+description = "Resumable, verified Edge TTS for AI-agent replies and Markdown files"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [{name = "Aleksei Ulianov"}]
+keywords = ["tts", "ai-agent", "edge-tts", "telegram", "markdown"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Operating System :: MacOS",
+  "Operating System :: POSIX :: Linux",
+]
+dependencies = [
+  "edge-tts==7.2.8",
+  "filelock>=3.16,<4",
+]
+
+[project.optional-dependencies]
+dev = ["build>=1.2", "pytest>=8.3"]
+
+[project.scripts]
+agent-voice = "agent_voice.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/AlekseiUL/agent-voice-kit"
+Repository = "https://github.com/AlekseiUL/agent-voice-kit"
+Issues = "https://github.com/AlekseiUL/agent-voice-kit/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_voice"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
