@@ -2,6 +2,10 @@
 
 All notable changes are documented here.
 
+## 0.2.1
+
+- Made the documented Hermes skill installation non-interactive with `--yes`.
+
 ## 0.2.0
 
 - Added an offline `--doctor` readiness check.

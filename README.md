@@ -55,7 +55,7 @@ sudo apt-get update && sudo apt-get install -y ffmpeg
 With `uv`:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.2.0"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.2.1"
 agent-voice --version
 agent-voice --doctor --json
 ```
@@ -83,8 +83,8 @@ For Hermes Agent, install the maintained skill after the CLI passes:
 
 ```bash
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.2.0/integrations/hermes/SKILL.md \
-  --name agent-voice
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.2.1/integrations/hermes/SKILL.md \
+  --name agent-voice --yes
 ```
 
 Start a new session or use `/reset`. The skill handles voice replies and complete Markdown narration, including the native Telegram voice attachment format.
@@ -137,7 +137,7 @@ The real receipt also contains the voice, format, byte size, SHA-256 digest and 
 
 A new request gets at most two attempts per chunk: the initial request and one retry for timeouts, connection failures, HTTP 429/5xx, `NoAudioReceived` or `WebSocketError`. Configuration errors and HTTP 403 are not retried.
 
-Completed chunks are verified before entering the checkpoint. Repeating the same text and settings reuses those chunks. The checkpoint manifest contains hashes and audio metadata, not the original text. The logical retention window is seven days; v0.2.0 does not yet delete expired cache directories automatically.
+Completed chunks are verified before entering the checkpoint. Repeating the same text and settings reuses those chunks. The checkpoint manifest contains hashes and audio metadata, not the original text. The logical retention window is seven days; v0.2.1 does not yet delete expired cache directories automatically.
 
 Disable checkpoint reuse and the retry when exact-one behavior is required:
 

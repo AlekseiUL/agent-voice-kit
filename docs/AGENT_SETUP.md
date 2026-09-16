@@ -31,10 +31,10 @@ Any agent that can run commands and attach files can use the CLI. The delivery s
 Install the CLI first, then the skill:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.2.0"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.2.1"
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.2.0/integrations/hermes/SKILL.md \
-  --name agent-voice
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.2.1/integrations/hermes/SKILL.md \
+  --name agent-voice --yes
 ```
 
 Start a new session or use `/reset`; tool and skill visibility is session-scoped. The skill tells Hermes how to preserve the full text, generate verified Ogg/Opus and return a native Telegram voice attachment.

@@ -55,7 +55,7 @@ sudo apt-get update && sudo apt-get install -y ffmpeg
 Через `uv`:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.2.0"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.2.1"
 agent-voice --version
 agent-voice --doctor --json
 ```
@@ -83,8 +83,8 @@ uv run agent-voice --help
 
 ```bash
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.2.0/integrations/hermes/SKILL.md \
-  --name agent-voice
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.2.1/integrations/hermes/SKILL.md \
+  --name agent-voice --yes
 ```
 
 Затем начните новую сессию или выполните `/reset`. Skill описывает голосовой ответ, полную озвучку Markdown и нативное голосовое вложение Telegram.
@@ -137,7 +137,7 @@ agent-voice answer.md --output answer.ogg --json
 
 Для каждого нового фрагмента допускаются максимум две попытки: исходный запрос и один повтор после timeout, ошибки соединения, HTTP 429/5xx, `NoAudioReceived` или `WebSocketError`. Ошибки конфигурации и HTTP 403 не повторяются.
 
-Готовый фрагмент попадает в checkpoint только после проверки. Повторный запуск с тем же текстом и настройками использует сохранённые части. Манифест содержит хеши и метаданные аудио, но не исходный текст. Логический срок хранения — семь дней; версия 0.2.0 пока не удаляет просроченные каталоги автоматически.
+Готовый фрагмент попадает в checkpoint только после проверки. Повторный запуск с тем же текстом и настройками использует сохранённые части. Манифест содержит хеши и метаданные аудио, но не исходный текст. Логический срок хранения — семь дней; версия 0.2.1 пока не удаляет просроченные каталоги автоматически.
 
 Отключить checkpoint и повтор для exact-one задачи:
 

@@ -19,7 +19,7 @@ Install Agent Voice Kit, verify its local prerequisites, run one explicit live s
 Use the pinned release:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.2.0"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.2.1"
 agent-voice --version
 agent-voice --doctor --json
 ```
@@ -54,8 +54,8 @@ After the CLI passes, install the maintained skill into the active Hermes profil
 
 ```bash
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.2.0/integrations/hermes/SKILL.md \
-  --name agent-voice
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.2.1/integrations/hermes/SKILL.md \
+  --name agent-voice --yes
 ```
 
 Start a new session or use `/reset` so the skill becomes visible. Do not modify another Hermes profile.

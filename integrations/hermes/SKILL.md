@@ -1,7 +1,7 @@
 ---
 name: agent-voice
 description: "Use when an agent must answer by voice or voice a text/Markdown document. Generate verified audio with Agent Voice Kit and deliver it through the active platform."
-version: 0.2.0
+version: 0.2.1
 license: MIT
 metadata:
   hermes:
