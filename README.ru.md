@@ -58,7 +58,7 @@ choco install ffmpeg -y
 Через `uv`:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.0"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.1"
 agent-voice --version
 agent-voice --doctor --json
 ```
@@ -86,7 +86,7 @@ uv run agent-voice --help
 
 ```bash
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.0/integrations/hermes/SKILL.md \
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.1/integrations/hermes/SKILL.md \
   --name agent-voice --yes
 ```
 
@@ -237,7 +237,7 @@ uv run agent-voice --text "Проверка живого синтеза." --outp
 
 ## Релизы, SBOM и PyPI
 
-Релизы по тегам собираются в GitHub Actions, получают GitHub provenance attestation и содержат SPDX JSON SBOM. Скачанный файл проверяется командой `gh attestation verify FILE --repo AlekseiUL/agent-voice-kit`.
+Релизы по тегам собираются в GitHub Actions, получают GitHub provenance и SBOM attestations и содержат CycloneDX JSON со всем установленным графом runtime-зависимостей. Скачанный файл проверяется командой `gh attestation verify FILE --repo AlekseiUL/agent-voice-kit`.
 
 В репозитории подготовлен tokenless workflow PyPI Trusted Publishing. Пока владелец аккаунта PyPI не зарегистрировал publisher и не выполнена первая реальная публикация, используйте закреплённый GitHub-тег из инструкции выше: наличие workflow само по себе не означает, что пакет уже появился в PyPI. Точная процедура без передачи секретов описана в [docs/PYPI_PUBLISHING.md](docs/PYPI_PUBLISHING.md).
 

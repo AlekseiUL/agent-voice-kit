@@ -31,9 +31,9 @@ Any agent that can run commands and attach files can use the CLI. The delivery s
 Install the CLI first, then the skill:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.0"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.1"
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.0/integrations/hermes/SKILL.md \
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.1/integrations/hermes/SKILL.md \
   --name agent-voice --yes
 ```
 

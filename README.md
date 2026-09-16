@@ -58,7 +58,7 @@ choco install ffmpeg -y
 With `uv`:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.0"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.1"
 agent-voice --version
 agent-voice --doctor --json
 ```
@@ -86,7 +86,7 @@ For Hermes Agent, install the maintained skill after the CLI passes:
 
 ```bash
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.0/integrations/hermes/SKILL.md \
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.1/integrations/hermes/SKILL.md \
   --name agent-voice --yes
 ```
 
@@ -237,7 +237,7 @@ Agent Voice Kit code is released under the [MIT License](LICENSE). It depends on
 
 ## Releases, SBOM and PyPI
 
-Tagged GitHub releases are built in GitHub Actions, receive GitHub artifact provenance attestations and include an SPDX JSON SBOM. Verify a downloaded artifact with `gh attestation verify FILE --repo AlekseiUL/agent-voice-kit`.
+Tagged GitHub releases are built in GitHub Actions, receive GitHub artifact provenance and SBOM attestations, and include a CycloneDX JSON inventory of the installed runtime dependency graph. Verify a downloaded artifact with `gh attestation verify FILE --repo AlekseiUL/agent-voice-kit`.
 
 The repository contains a tokenless PyPI Trusted Publishing workflow. Until the owner-side PyPI publisher registration and first publication are complete, install the pinned GitHub tag shown above; do not assume the PyPI name is live merely because the workflow exists. The exact no-secret activation procedure is in [docs/PYPI_PUBLISHING.md](docs/PYPI_PUBLISHING.md).
 

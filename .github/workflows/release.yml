@@ -26,14 +26,16 @@ jobs:
           uv run pytest
           uv run python scripts/privacy_scan.py
           uv build
-      - name: Generate SPDX SBOM
-        uses: anchore/sbom-action@v0
-        with:
-          path: dist
-          format: spdx-json
-          output-file: dist/agent-voice-kit-${{ github.ref_name }}.spdx.json
-          upload-artifact: false
-          upload-release-assets: false
+      - name: Generate complete CycloneDX runtime SBOM
+        run: |
+          uv venv .sbom-venv
+          uv pip install --python .sbom-venv/bin/python dist/*.whl
+          uv run cyclonedx-py environment .sbom-venv/bin/python \
+            --pyproject pyproject.toml \
+            --mc-type application \
+            --output-reproducible \
+            --output-format JSON \
+            --output-file dist/agent-voice-kit-${{ github.ref_name }}.cyclonedx.json
       - name: Sign build provenance
         uses: actions/attest@v4
         with:
@@ -46,7 +48,7 @@ jobs:
           subject-path: |
             dist/*.whl
             dist/*.tar.gz
-          sbom-path: dist/agent-voice-kit-${{ github.ref_name }}.spdx.json
+          sbom-path: dist/agent-voice-kit-${{ github.ref_name }}.cyclonedx.json
       - name: Publish immutable GitHub release
         env:
           GH_TOKEN: ${{ github.token }}

@@ -16,7 +16,7 @@ Do not paste a PyPI password or API token into an issue, chat, repository file o
 
 ## First publication
 
-After the publisher exists and the signed `v0.3.0` release is complete, run the GitHub workflow **Publish to PyPI** with input `v0.3.0`. The workflow checks that the package version matches the selected tag, builds in a separate low-privilege job, and gives `id-token: write` only to the publication job.
+After the publisher exists and the signed `v0.3.1` release is complete, run the GitHub workflow **Publish to PyPI** with input `v0.3.1`. The workflow checks that the package version matches the selected tag, builds in a separate low-privilege job, and gives `id-token: write` only to the publication job.
 
 ## Verification
 
@@ -24,8 +24,8 @@ A successful workflow is not sufficient by itself. Read back:
 
 ```bash
 python -m pip index versions agent-voice-kit
-uv tool install agent-voice-kit==0.3.0
+uv tool install agent-voice-kit==0.3.1
 agent-voice --version
 ```
 
-Also verify `https://pypi.org/project/agent-voice-kit/` shows version `0.3.0` and the expected project links. If publication fails, do not reuse or expose tokens; inspect the Trusted Publisher tuple above first.
+Also verify `https://pypi.org/project/agent-voice-kit/` shows version `0.3.1` and the expected project links. If publication fails, do not reuse or expose tokens; inspect the Trusted Publisher tuple above first.

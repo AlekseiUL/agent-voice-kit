@@ -2,6 +2,10 @@
 
 All notable changes are documented here.
 
+## 0.3.1
+
+- Generate a complete CycloneDX runtime dependency SBOM from an isolated wheel installation.
+
 ## 0.3.0
 
 - Added UTF-8 text-file input independent of filename extension, with Markdown auto-detection.
