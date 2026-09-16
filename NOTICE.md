@@ -4,7 +4,7 @@ Agent Voice Kit is independent software released under the MIT License.
 
 ## edge-tts
 
-This project depends on [`edge-tts`](https://github.com/rany2/edge-tts), an independent Python client maintained by rany2 and contributors. `edge-tts` is distributed under the GNU Lesser General Public License v3.0 (LGPL-3.0). Agent Voice Kit does not copy or modify its source code; it installs and imports the published package as a dependency.
+This project depends on [`edge-tts`](https://github.com/rany2/edge-tts), an independent Python client maintained by rany2 and contributors. Per its upstream license file, all files except `src/edge_tts/srt_composer.py` are distributed under the GNU Lesser General Public License v3.0 (LGPL-3.0); that file is distributed under the MIT License. Agent Voice Kit does not copy or modify upstream source code; it installs and imports the published package as a separate dependency.
 
 - Source: https://github.com/rany2/edge-tts
 - License: https://github.com/rany2/edge-tts/blob/master/LICENSE

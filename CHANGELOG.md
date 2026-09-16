@@ -2,6 +2,14 @@
 
 All notable changes are documented here.
 
+## 0.2.0
+
+- Added an offline `--doctor` readiness check.
+- Added a safe, pinned installation contract for command-capable AI agents.
+- Added an installable Hermes Agent skill for voice replies and Markdown narration.
+- Clarified the boundary between this reliability wrapper and upstream `edge-tts`.
+- Clarified third-party licensing and platform-specific delivery responsibilities.
+
 ## 0.1.0
 
 - Initial standalone release.

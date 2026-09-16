@@ -10,6 +10,12 @@ Turn an AI-agent reply or a Markdown file into verified MP3 or Telegram-ready Og
 
 The project adds the reliability layer that a one-line TTS call does not provide: bounded retry, short chunks, checkpoint resume, full decode verification and atomic output publication.
 
+## How it differs from `edge-tts`
+
+[`edge-tts`](https://github.com/rany2/edge-tts) is the upstream client that talks to Microsoft Edge Read Aloud. It already provides direct synthesis, voice discovery, subtitles and prosody controls. Agent Voice Kit is **not a fork or replacement**: it installs `edge-tts` as a separate dependency and adds a workflow-oriented reliability layer for AI agents.
+
+Agent Voice Kit adds Markdown cleanup, safe chunking, one bounded transient retry, verified checkpoint resume, complete-file decode validation, atomic publication, Telegram-ready Ogg/Opus and a JSON receipt. It deliberately does not duplicate upstream voice listing, subtitle or playback features; use `edge-tts` directly when those are what you need.
+
 ## What it does
 
 - reads UTF-8 Markdown or accepts text directly;
@@ -49,8 +55,9 @@ sudo apt-get update && sudo apt-get install -y ffmpeg
 With `uv`:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.2.0"
 agent-voice --version
+agent-voice --doctor --json
 ```
 
 Or from a clone:
@@ -61,6 +68,26 @@ cd agent-voice-kit
 uv sync
 uv run agent-voice --help
 ```
+
+`--doctor` is offline: it checks `edge-tts`, FFmpeg/ffprobe, required encoders and cache access without sending text to Microsoft. A short explicit synthesis is still required to prove network access.
+
+## Install it with an AI agent
+
+Send the repository link and this instruction:
+
+> Install Agent Voice Kit and follow `INSTALL_FOR_AGENTS.md`. Do not use sudo, change my profile, restart services or send anything externally without approval. Run the offline doctor and one short live test, then report the evidence and remaining risk.
+
+The complete copy/paste workflow is in [docs/AGENT_SETUP.md](docs/AGENT_SETUP.md). The pinned safety contract is [INSTALL_FOR_AGENTS.md](INSTALL_FOR_AGENTS.md). Any command-capable agent can use the CLI; native delivery remains platform-specific.
+
+For Hermes Agent, install the maintained skill after the CLI passes:
+
+```bash
+hermes skills install \
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.2.0/integrations/hermes/SKILL.md \
+  --name agent-voice
+```
+
+Start a new session or use `/reset`. The skill handles voice replies and complete Markdown narration, including the native Telegram voice attachment format.
 
 ## Quick start
 
@@ -110,7 +137,7 @@ The real receipt also contains the voice, format, byte size, SHA-256 digest and 
 
 A new request gets at most two attempts per chunk: the initial request and one retry for timeouts, connection failures, HTTP 429/5xx, `NoAudioReceived` or `WebSocketError`. Configuration errors and HTTP 403 are not retried.
 
-Completed chunks are verified before entering the checkpoint. Repeating the same text and settings reuses those chunks. The checkpoint manifest contains hashes and audio metadata, not the original text. The logical retention window is seven days; v0.1.0 does not yet delete expired cache directories automatically.
+Completed chunks are verified before entering the checkpoint. Repeating the same text and settings reuses those chunks. The checkpoint manifest contains hashes and audio metadata, not the original text. The logical retention window is seven days; v0.2.0 does not yet delete expired cache directories automatically.
 
 Disable checkpoint reuse and the retry when exact-one behavior is required:
 
@@ -141,6 +168,7 @@ Telegram bots should upload the generated `.ogg` through their voice-message met
 ```text
 agent-voice INPUT [-o FILE]
 agent-voice --text TEXT [-o FILE]
+agent-voice --doctor [--json]
 ```
 
 Run `agent-voice --help` for the verified current flag list.

@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from . import __version__
+from .diagnostics import doctor
 from .engine import synthesize
 
 
@@ -29,6 +30,7 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--no-resume", action="store_true", help="Disable checkpoint reuse and the one transient retry")
     value.add_argument("--force", action="store_true", help="Replace only the named output file")
     value.add_argument("--cache-dir", help="Checkpoint directory (default: user cache directory)")
+    value.add_argument("--doctor", action="store_true", help="Check local prerequisites without contacting TTS")
     value.add_argument("--json", action="store_true", help="Print a machine-readable receipt")
     value.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     return value
@@ -36,6 +38,26 @@ def parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
+    if args.doctor:
+        if args.input or args.text:
+            parser().error("--doctor does not accept an input file or --text")
+        try:
+            report = doctor(args.cache_dir)
+            if args.json:
+                print(json.dumps(report, ensure_ascii=False, sort_keys=True))
+            else:
+                state = "ready" if report["ready"] else "not ready"
+                print(f"Agent Voice Kit doctor: {state}")
+                for name, passed in report["checks"].items():
+                    print(f"  {'PASS' if passed else 'FAIL'} {name}")
+                print(report["next_step"])
+            return 0 if report["ready"] else 1
+        except Exception as exc:
+            if args.json:
+                print(json.dumps({"ready": False, "error": str(exc)}, ensure_ascii=False, sort_keys=True))
+            else:
+                print(f"agent-voice doctor: {exc}", file=sys.stderr)
+            return 1
     if bool(args.input) == bool(args.text):
         parser().error("provide exactly one input file or --text")
     try:
