@@ -33,5 +33,5 @@ jobs:
       - run: uv sync --locked --extra dev
       - run: uv run --locked pytest
       - run: uv run --locked python scripts/privacy_scan.py
-      - run: uv build --locked
+      - run: uv build
       - run: uv run --locked agent-voice --help
