@@ -1,0 +1,17 @@
+name: dependency-update-proposal
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  propose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv lock --upgrade
+      - run: git diff -- uv.lock > dependency-update.patch
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reviewed-update-required
+          path: dependency-update.patch
+# This opt-in job creates an artifact only. It never pushes or publishes.

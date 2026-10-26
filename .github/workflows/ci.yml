@@ -28,7 +28,7 @@ jobs:
       - name: Install FFmpeg on Windows
         if: runner.os == 'Windows'
         run: choco install ffmpeg -y --no-progress
-      - run: uv sync --extra dev
+      - run: uv sync --locked --extra dev
       - run: uv run pytest
       - run: uv run python scripts/privacy_scan.py
       - run: uv build

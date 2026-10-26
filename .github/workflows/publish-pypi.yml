@@ -26,6 +26,7 @@ jobs:
           set -euo pipefail
           VERSION=$(uv version --short)
           test "v${VERSION}" = "${{ inputs.tag }}"
+          uv sync --locked --extra dev
           uv build
       - uses: actions/upload-artifact@v6
         with:
