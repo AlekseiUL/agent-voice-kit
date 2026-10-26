@@ -22,7 +22,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: Test and build
         run: |
-          uv sync --extra dev
+          uv sync --locked --extra dev
           uv run pytest
           uv run python scripts/privacy_scan.py
           uv build
