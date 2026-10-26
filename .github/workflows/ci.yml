@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   test:
+    timeout-minutes: 20
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -21,7 +22,8 @@ jobs:
           python-version: ${{ matrix.python }}
       - name: Install FFmpeg on Ubuntu
         if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+        timeout-minutes: 5
+        run: sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 update && sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 install -y ffmpeg
       - name: Install FFmpeg on macOS
         if: runner.os == 'macOS'
         run: brew install ffmpeg
@@ -29,7 +31,7 @@ jobs:
         if: runner.os == 'Windows'
         run: choco install ffmpeg -y --no-progress
       - run: uv sync --locked --extra dev
-      - run: uv run pytest
-      - run: uv run python scripts/privacy_scan.py
-      - run: uv build
-      - run: uv run agent-voice --help
+      - run: uv run --locked pytest
+      - run: uv run --locked python scripts/privacy_scan.py
+      - run: uv build --locked
+      - run: uv run --locked agent-voice --help
