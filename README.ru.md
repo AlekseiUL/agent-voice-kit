@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/AlekseiUL/agent-voice-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/AlekseiUL/agent-voice-kit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)
+![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)
 
 Превращает ответ AI-агента или любой обычный UTF-8 текстовый файл в проверенный MP3 либо готовый для Telegram Ogg/Opus. По умолчанию Agent Voice Kit обращается к серверному Microsoft Edge Read Aloud через независимую библиотеку [`edge-tts`](https://github.com/rany2/edge-tts), поэтому нейросетевая модель не запускается на вашем компьютере. Если нужен официальный API или SLA, доступны опциональные маршруты Azure Speech и OpenAI Speech API.
 
@@ -36,7 +36,7 @@ Agent Voice Kit добавляет очистку Markdown, безопасное
 
 ## Требования
 
-- Python 3.10 или новее;
+- Python 3.11 или новее;
 - `ffmpeg` и `ffprobe` в `PATH`;
 - интернет для живого синтеза.
 
@@ -58,7 +58,7 @@ choco install ffmpeg -y
 Через `uv`:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.2"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.4.0"
 agent-voice --version
 agent-voice --doctor --json
 ```
@@ -86,7 +86,7 @@ uv run agent-voice --help
 
 ```bash
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.2/integrations/hermes/SKILL.md \
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.4.0/integrations/hermes/SKILL.md \
   --name agent-voice --yes
 ```
 

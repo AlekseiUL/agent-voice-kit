@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/AlekseiUL/agent-voice-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/AlekseiUL/agent-voice-kit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)
+![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)
 
 Turn an AI-agent reply or any regular UTF-8 text file into verified MP3 or Telegram-ready Ogg/Opus audio. The default route uses server-side Microsoft Edge Read Aloud through the independent [`edge-tts`](https://github.com/rany2/edge-tts) client, so speech generation does not run a neural model on your computer. Optional official Azure Speech and OpenAI Speech API routes are available when an SLA or supported API is required.
 
@@ -36,7 +36,7 @@ For contractual availability or commercial support, select and configure an offi
 
 ## Requirements
 
-- Python 3.10 or newer;
+- Python 3.11 or newer;
 - `ffmpeg` and `ffprobe` in `PATH`;
 - internet access for live synthesis.
 
@@ -58,7 +58,7 @@ choco install ffmpeg -y
 With `uv`:
 
 ```bash
-uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.3.2"
+uv tool install "git+https://github.com/AlekseiUL/agent-voice-kit.git@v0.4.0"
 agent-voice --version
 agent-voice --doctor --json
 ```
@@ -86,7 +86,7 @@ For Hermes Agent, install the maintained skill after the CLI passes:
 
 ```bash
 hermes skills install \
-  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.3.2/integrations/hermes/SKILL.md \
+  https://raw.githubusercontent.com/AlekseiUL/agent-voice-kit/v0.4.0/integrations/hermes/SKILL.md \
   --name agent-voice --yes
 ```
 

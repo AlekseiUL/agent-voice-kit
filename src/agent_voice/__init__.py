@@ -3,4 +3,4 @@
 from .engine import SynthesisResult, synthesize
 
 __all__ = ["SynthesisResult", "synthesize"]
-__version__ = "0.3.2"
+__version__ = "0.4.0"
