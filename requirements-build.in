@@ -1,0 +1,4 @@
+# Build and test tools included in the dependency audit.
+hatchling>=1.27
+build>=1.2
+pytest>=8

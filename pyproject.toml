@@ -4,10 +4,10 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agent-voice-kit"
-version = "0.3.2"
+version = "0.4.0"
 description = "Resumable, verified TTS for AI-agent replies and UTF-8 text files"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = {file = "LICENSE"}
 authors = [{name = "Aleksei Ulianov"}]
 keywords = ["tts", "ai-agent", "edge-tts", "telegram", "markdown"]
@@ -15,7 +15,7 @@ classifiers = [
   "Development Status :: 3 - Alpha",
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
@@ -26,7 +26,7 @@ classifiers = [
 ]
 dependencies = [
   "edge-tts==7.2.8",
-  "filelock>=3.16,<4",
+  "filelock>=4.2.1,<5",
 ]
 
 [project.optional-dependencies]
