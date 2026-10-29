@@ -2,6 +2,8 @@ name: CI
 
 on:
   push:
+    branches: [main]
+    tags: ['**']
   pull_request:
 
 permissions:
@@ -30,6 +32,10 @@ jobs:
       - name: Install FFmpeg on Windows
         if: runner.os == 'Windows'
         run: choco install ffmpeg -y --no-progress
+      - name: Check dependency consistency before installation
+        run: |
+          uv lock --check
+          uv run --no-project --with packaging==26.3 python scripts/check_dependency_consistency.py
       - run: uv sync --locked --extra dev
       - run: uv run --locked pytest
       - run: uv run --locked python scripts/privacy_scan.py
