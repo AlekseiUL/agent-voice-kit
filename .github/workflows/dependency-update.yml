@@ -9,7 +9,12 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
       - run: uv lock --upgrade
-      - run: git diff -- uv.lock > dependency-update.patch
+      - name: Regenerate audit snapshot from the candidate lock
+        run: |
+          uv export --locked --all-extras --no-emit-project --no-hashes --output-file "${RUNNER_TEMP}/audit-constraints.txt"
+          uv pip compile pyproject.toml requirements-build.in --all-extras --python-version 3.12 --python-platform linux --constraint "${RUNNER_TEMP}/audit-constraints.txt" --no-header --no-annotate --output-file requirements-audit.txt
+          uv run --no-project --python 3.12 --with packaging==26.3 python scripts/check_dependency_consistency.py
+      - run: git diff -- uv.lock requirements-audit.txt > dependency-update.patch
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: reviewed-update-required
