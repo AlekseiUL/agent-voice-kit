@@ -29,7 +29,7 @@ packageurl-python==0.17.6
 packaging==26.3
 pathspec==1.1.1
 pip-requirements-parser==32.0.1
-pluggy==1.6.0
+pluggy==1.7.0
 propcache==0.5.4
 py-serializable==2.1.0
 pygments==2.21.0
